@@ -1,35 +1,87 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import Home from './pages/Home';
+import About from './pages/About';
+import Events from './pages/Events';
+import SpecificEvent from './pages/SpecificEvent';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+function Main() {
+    const location = useLocation();
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    return (
+        <AnimatePresence mode="wait">
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <motion.div
+                            key={location.pathname}
+                            initial={{ opacity: 0, x: 100 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -100 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <Home />
+                        </motion.div>
+                    }
+                />
+                <Route
+                    path="/about"
+                    element={
+                        <motion.div
+                            key={location.pathname}
+                            initial={{ opacity: 0, x: 100 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -100 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <About />
+                        </motion.div>
+                    }
+                />
+                <Route
+                    path="/events"
+                    element={
+                        <motion.div
+                            key={location.pathname}
+                            initial={{ opacity: 0, x: 100 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -100 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <Events />
+                        </motion.div>
+                    }
+                />
+                <Route
+                    path="/events/:id"
+                    element={
+                        <motion.div
+                            key={location.pathname}
+                            initial={{ opacity: 0, x: 100 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -100 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <SpecificEvent />
+                        </motion.div>
+                    }
+                />
+            </Routes>
+        </AnimatePresence>
+    );
 }
 
-export default App
+function App() {
+    return (
+        <Router>
+            <nav>
+                <Link to="/">Home</Link> | <Link to="/about">About</Link> | <Link to="/events">Events</Link>
+            </nav>
+            <Main />
+        </Router>
+    );
+}
+
+export default App;

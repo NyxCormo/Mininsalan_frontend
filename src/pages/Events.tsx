@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import type { Variants } from "framer-motion";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale/fr';
 
@@ -38,7 +39,7 @@ function Events() {
                 console.log('Fetch response status:', response.status, response.statusText);
             }
             if (!response.ok) {
-                throw new Error(`Échec de la récupération des événements: ${response.statusText}`);
+                console.error(`Échec de la récupération des événements: ${response.statusText}`);
             }
             const data: EventSummary[] = await response.json();
             if (process.env.NODE_ENV === 'development') {
@@ -61,7 +62,6 @@ function Events() {
     const getEventStatus = (event: EventSummary): { text: string; color: string; bgColor: string; icon: string } => {
         const now = new Date();
         const start = new Date(event.startDate);
-        const end = new Date(event.endDate);
 
         if (event.isActive) {
             return {
@@ -260,10 +260,20 @@ function Events() {
         );
     }
 
-    const cardVariants = {
+    const cardVariants: Variants = {
         hidden: { opacity: 0, y: 30, scale: 0.95 },
-        visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, type: "spring" } },
-        exit: { opacity: 0, y: -30, scale: 0.95, transition: { duration: 0.2 } }
+        visible: {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: { duration: 0.4, type: "spring" }
+        },
+        exit: {
+            opacity: 0,
+            y: -30,
+            scale: 0.95,
+            transition: { duration: 0.2 }
+        }
     };
 
     const counts = getFilterCounts();
@@ -285,11 +295,8 @@ function Events() {
                     fontSize: '2.5rem',
                     fontWeight: 'bold'
                 }}>
-                    🎮 Événements Gaming
+                    🎮 Les dates
                 </h1>
-                <p style={{ color: '#ccc', fontSize: '1.1rem', margin: 0 }}>
-                    Découvrez nos défis et compétitions !
-                </p>
             </motion.div>
 
             <button

@@ -287,11 +287,11 @@ function Events() {
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                style={{ marginBottom: '2rem', textAlign: 'center' }}
+                style={{ marginTop: '3rem', marginBottom: '1rem', textAlign: 'center' }}
             >
                 <h1 style={{
                     color: '#ffd700',
-                    margin: '0 0 0.5rem 0',
+                    margin: '0',
                     fontSize: '2.5rem',
                     fontWeight: 'bold'
                 }}>
@@ -299,34 +299,19 @@ function Events() {
                 </h1>
             </motion.div>
 
-            <button
-                onClick={() => {
-                    localStorage.removeItem('cachedEventsSummary');
-                    setLoading(true);
-                    setRefreshKey(prev => prev + 1);
-                }}
-                style={{
-                    padding: '0.5rem 1rem',
-                    backgroundColor: '#ffd700',
-                    color: '#000',
-                    border: 'none',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    marginBottom: '1rem',
-                    fontSize: '1rem',
-                    fontWeight: 'bold'
-                }}
-            >
-                🔄 Rafraîchir les événements
-            </button>
-
-            {/* Fixed layout to prevent search + filters overlap */}
+            {/* Zone recherche + filtres + refresh alignés */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '1rem',
+                    marginBottom: '2rem'
+                }}
             >
+                {/* Barre de recherche */}
                 <input
                     type="text"
                     placeholder="🔍 Rechercher un événement..."
@@ -351,45 +336,64 @@ function Events() {
                     }}
                 />
 
-                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                    {[
-                        { key: 'all', label: 'Tous', icon: '📋', count: counts.all },
-                        { key: 'active', label: 'Actifs', icon: '🔥', count: counts.active },
-                        { key: 'upcoming', label: 'À venir', icon: '⏳', count: counts.upcoming },
-                        { key: 'past', label: 'Terminés', icon: '✅', count: counts.past }
-                    ].map(({ key, label, icon, count }) => (
-                        <button
-                            key={key}
-                            onClick={() => setFilter(key as EventFilter)}
-                            style={{
-                                padding: '0.6rem 1rem',
-                                border: `2px solid ${filter === key ? '#ffd700' : '#555'}`,
-                                borderRadius: '20px',
-                                backgroundColor: filter === key ? '#ffd700' : '#2a2a2a',
-                                color: filter === key ? '#000' : '#fff',
-                                cursor: 'pointer',
-                                fontSize: '0.9rem',
-                                fontWeight: filter === key ? 'bold' : 'normal',
-                                transition: 'all 0.2s ease'
-                            }}
-                            onMouseEnter={(e) => {
-                                if (filter !== key) {
-                                    e.currentTarget.style.borderColor = '#ffd700';
-                                    e.currentTarget.style.backgroundColor = '#333';
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                if (filter !== key) {
-                                    e.currentTarget.style.borderColor = '#555';
-                                    e.currentTarget.style.backgroundColor = '#2a2a2a';
-                                }
-                            }}
-                        >
-                            {icon} {label} ({count})
-                        </button>
-                    ))}
+                {/* Filtres + bouton refresh alignés sur la même ligne */}
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    gap: '0.5rem'
+                }}>
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                        {[
+                            { key: 'all', label: 'Tous', icon: '📋', count: counts.all },
+                            { key: 'active', label: 'Actifs', icon: '🔥', count: counts.active },
+                            { key: 'upcoming', label: 'À venir', icon: '⏳', count: counts.upcoming },
+                            { key: 'past', label: 'Terminés', icon: '✅', count: counts.past }
+                        ].map(({ key, label, icon, count }) => (
+                            <button
+                                key={key}
+                                onClick={() => setFilter(key as EventFilter)}
+                                style={{
+                                    padding: '0.6rem 1rem',
+                                    border: `2px solid ${filter === key ? '#ffd700' : '#555'}`,
+                                    borderRadius: '20px',
+                                    backgroundColor: filter === key ? '#ffd700' : '#2a2a2a',
+                                    color: filter === key ? '#000' : '#fff',
+                                    cursor: 'pointer',
+                                    fontSize: '0.9rem',
+                                    fontWeight: filter === key ? 'bold' : 'normal',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                {icon} {label} ({count})
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Bouton refresh à droite */}
+                    <button
+                        onClick={() => {
+                            localStorage.removeItem('cachedEventsSummary');
+                            setLoading(true);
+                            setRefreshKey(prev => prev + 1);
+                        }}
+                        style={{
+                            padding: '0.6rem 1rem',
+                            backgroundColor: '#ffd700',
+                            color: '#000',
+                            border: 'none',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            fontSize: '0.9rem',
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        🔄 Rafraîchir
+                    </button>
                 </div>
             </motion.div>
+
 
             {searchTerm && (
                 <motion.p

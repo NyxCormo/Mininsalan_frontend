@@ -150,7 +150,7 @@ function EnhancedNavbar() {
                         WebkitTextFillColor: 'transparent',
                         backgroundClip: 'text'
                     }}>
-                        ChallengeHub
+                        Mininsalan
                     </span>
                 </div>
 
